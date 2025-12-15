@@ -24,7 +24,7 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
-  box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
+  box-shadow: inset 0 0 220px rgba(0,0,0,0.9);
   pointer-events: none;
 }
 
@@ -45,10 +45,15 @@ body::before {
   pointer-events: none;
 }
 
+.scene {
+  perspective: 1200px;
+}
+
 .container {
   text-align: center;
   padding: 50px;
   max-width: 720px;
+  transform-style: preserve-3d;
   animation: breathe 6s ease-in-out infinite;
 }
 
@@ -83,10 +88,16 @@ button {
   background: transparent;
   border: 2px solid rgba(255,255,255,0.4);
   color: #fff;
-  padding: 16px 40px;
+  padding: 18px 48px;
   font-size: 1rem;
   border-radius: 999px;
   cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  border-color: #fff;
+  transform: translateY(-2px);
 }
 
 .footer {
@@ -131,17 +142,19 @@ button {
 
 <body>
 
-<div class="container" id="card">
-  <h1>Aloo7027</h1>
-  <div class="identity">BHONDU site • LOW energy • NO seriousness</div>
+<div class="scene">
+  <div class="container" id="card">
+    <h1>Aloo7027</h1>
+    <div class="identity">test site • chaotic energy • zero seriousness</div>
 
-  <div class="main-line">I'm Yonro</div>
-  <div class="subline">GHEE + TEL dono khatam hai</div>
+    <div class="main-line">I'm Yonro</div>
+    <div class="subline">I'm wasting time as usual</div>
 
-  <button id="chaosBtn">Don’t click</button>
+    <button id="chaosBtn">Don’t click</button>
+  </div>
 </div>
 
-<div class="footer">BEKAR build • ONLY chaos</div>
+<div class="footer">experimental build • controlled chaos</div>
 
 <!-- FULLSCREEN SCOLD -->
 <div class="fullscreen" id="screen">
@@ -151,8 +164,15 @@ button {
 </div>
 
 <script>
-/* ================= CORE CHAOS ================= */
+/* ===== PARALLAX (COLORFUL FEEL WITHOUT COLORS) ===== */
+const card = document.getElementById("card");
+document.addEventListener("mousemove", e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 10;
+  const y = (e.clientY / window.innerHeight - 0.5) * 10;
+  card.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+});
 
+/* ===== CORE CHAOS ===== */
 const btn = document.getElementById("chaosBtn");
 const screen = document.getElementById("screen");
 const lines = [...document.querySelectorAll(".fs-line")];
@@ -176,8 +196,7 @@ function fullscreenScold() {
   }, 4600);
 }
 
-/* ================= FAKE LAG ================= */
-
+/* ===== FAKE LAG ===== */
 function fakeLag(duration = 800) {
   document.body.style.cursor = "wait";
   document.body.style.pointerEvents = "none";
@@ -186,93 +205,52 @@ function fakeLag(duration = 800) {
     document.body.style.pointerEvents = "";
   }, duration);
 }
-
 document.addEventListener("click", () => {
   if (Math.random() < 0.25) fakeLag(700 + Math.random() * 600);
 });
 
-/* ================= FAKE BATTERY ================= */
-
+/* ===== FAKE BATTERY ===== */
 setTimeout(() => {
   if (Math.random() < 0.8) {
     const warn = document.createElement("div");
-    warn.innerHTML = `
-      <div style="
-        background:#111;
-        border:1px solid #444;
-        padding:14px 18px;
-        font-size:0.85rem;
-        opacity:0;
-        transition:opacity 1s;
-      ">
-        Battery critically low.<br>
-        Please connect your charger.
-      </div>`;
+    warn.innerHTML = `<div style="background:#111;border:1px solid #444;padding:14px;font-size:.85rem;">Battery critically low.<br>Please connect your charger.</div>`;
     warn.style.position = "fixed";
     warn.style.bottom = "30px";
     warn.style.right = "30px";
     warn.style.zIndex = "999";
     document.body.appendChild(warn);
-    setTimeout(() => warn.firstChild.style.opacity = "0.9", 200);
     setTimeout(() => warn.remove(), 5000);
   }
 }, 15000 + Math.random() * 15000);
 
-/* ================= FAKE PERMISSION ================= */
-
+/* ===== FAKE PERMISSION ===== */
 setTimeout(() => {
   if (Math.random() < 0.7) {
     const box = document.createElement("div");
-    box.innerHTML = `
-      <div style="
-        background:#111;
-        border:1px solid #444;
-        padding:16px;
-        font-size:0.85rem;
-        max-width:320px;
-      ">
-        <div style="opacity:0.7;">This site wants to</div>
-        <div style="font-weight:600;margin:8px 0;">Access your productivity</div>
-        <div style="display:flex;gap:10px;justify-content:flex-end;">
-          <button>Block</button>
-          <button>Allow</button>
-        </div>
-      </div>`;
+    box.innerHTML = `<div style="background:#111;border:1px solid #444;padding:16px;font-size:.85rem;">This site wants to access your productivity<br><br><button>Block</button> <button>Allow</button></div>`;
     box.style.position = "fixed";
     box.style.top = "20px";
     box.style.left = "50%";
     box.style.transform = "translateX(-50%)";
     box.style.zIndex = "999";
     document.body.appendChild(box);
-    box.querySelectorAll("button").forEach(b =>
-      b.onclick = () => box.remove()
-    );
+    box.querySelectorAll("button").forEach(b => b.onclick = () => box.remove());
   }
 }, 10000 + Math.random() * 15000);
 
-/* ================= BLACK FLASH ================= */
-
-function blackFlash() {
-  const flash = document.createElement("div");
-  flash.innerText = "GU KHALE";
-  Object.assign(flash.style, {
-    position:"fixed",
-    inset:"0",
-    background:"#000",
-    color:"#fff",
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"center",
-    fontSize:"5rem",
-    fontWeight:"900",
-    zIndex:"10000"
-  });
-  document.body.appendChild(flash);
-  setTimeout(() => flash.remove(), 350);
-}
-
+/* ===== BLACK FLASH ===== */
 setTimeout(() => {
-  if (Math.random() < 0.35) blackFlash();
+  if (Math.random() < 0.35) {
+    const flash = document.createElement("div");
+    flash.innerText = "GU KHALE";
+    Object.assign(flash.style,{
+      position:"fixed",inset:"0",background:"#000",color:"#fff",
+      display:"flex",alignItems:"center",justifyContent:"center",
+      fontSize:"5rem",fontWeight:"900",zIndex:"10000"
+    });
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 350);
+  }
 }, 8000 + Math.random() * 20000);
 </script>
 
