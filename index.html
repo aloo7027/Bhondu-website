@@ -1,68 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My First Website</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            color: white;
-            text-align: center;
-        }
-        header {
-            padding: 50px 20px;
-        }
-        section {
-            background: white;
-            color: #333;
-            margin: 20px;
-            padding: 30px;
-            border-radius: 10px;
-        }
-        footer {
-            padding: 20px;
-            font-size: 14px;
-        }
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            background: #4facfe;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #007bff;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Aloo_Ka_Paratha</title>
+
+<style>
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        height: 100vh;
+        font-family: system-ui, sans-serif;
+        background: radial-gradient(circle at top, #1b1b1b, #000);
+        color: #eaeaea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .container {
+        text-align: center;
+        padding: 40px;
+        max-width: 600px;
+        animation: float 4s ease-in-out infinite;
+        z-index: 2;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    .tagline {
+        font-size: 1.2rem;
+        opacity: 0.7;
+        margin-bottom: 30px;
+    }
+
+    .chaos {
+        font-size: 1rem;
+        color: #aaa;
+        margin-bottom: 30px;
+    }
+
+    button {
+        background: none;
+        border: 2px solid #555;
+        color: #fff;
+        padding: 14px 28px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    button:hover {
+        border-color: #fff;
+        background: rgba(255,255,255,0.05);
+        transform: scale(1.05);
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 20px;
+        font-size: 0.8rem;
+        opacity: 0.4;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+    }
+
+    /* fake error box */
+    .error {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #111;
+        border: 1px solid #444;
+        padding: 15px 20px;
+        font-size: 0.9rem;
+        opacity: 0;
+        transition: 0.4s;
+    }
+
+    .error.show {
+        opacity: 1;
+    }
+
+    /* dots */
+    .dot {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        opacity: 0.2;
+        animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+        from { transform: translateY(0); }
+        to { transform: translateY(100vh); }
+    }
+
+    .counter {
+        margin-top: 20px;
+        font-size: 0.9rem;
+        opacity: 0.6;
+    }
+</style>
 </head>
+
 <body>
 
-<header>
-    <h1>Welcome to My Website 🚀</h1>
-    <p>This website was made without coding knowledge!</p>
-    <button onclick="alert('Thanks for visiting!')">Click Me</button>
-</header>
+<div class="container">
+    <h1>Aloo_Ka_Paratha</h1>
+    <div class="tagline">I'm wasting time as usual</div>
 
-<section>
-    <h2>About Me</h2>
-    <p>
-        Hello! This is my first website hosted on GitHub.
-        I’m learning step by step and this is awesome 😎
-    </p>
-</section>
+    <div class="chaos">
+        This website serves no purpose.<br>
+        Just like most of my decisions.
+    </div>
 
-<section>
-    <h2>Contact</h2>
-    <p>Email: example@email.com</p>
-</section>
+    <button id="evilBtn">Click responsibly</button>
 
-<footer>
-    © 2025 My Website | Powered by GitHub Pages
-</footer>
+    <div class="counter">
+        Productivity level: <span id="count">0</span>
+    </div>
+</div>
+
+<div class="footer">
+    experimental • chaotic • unfinished
+</div>
+
+<div class="error" id="errorBox">
+    ⚠ System error: Motivation not found
+</div>
+
+<script>
+    const btn = document.getElementById("evilBtn");
+    const errorBox = document.getElementById("errorBox");
+    const count = document.getElementById("count");
+
+    let clicks = 0;
+
+    btn.addEventListener("mouseenter", () => {
+        if (Math.random() < 0.4) {
+            btn.style.transform = `translate(${Math.random()*200-100}px, ${Math.random()*200-100}px)`;
+        }
+    });
+
+    btn.addEventListener("click", () => {
+        clicks++;
+        count.innerText = clicks === 1 ? 0 : 0; // stays 0 forever 💀
+
+        const actions = [
+            () => alert("Tune phir aaj padhayi nhi ki na?"),
+            () => window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank"),
+            () => showError(),
+            () => alert("This button achieved nothing."),
+            () => alert("Productivity unchanged.")
+        ];
+
+        actions[Math.floor(Math.random() * actions.length)]();
+    });
+
+    function showError() {
+        errorBox.classList.add("show");
+        setTimeout(() => errorBox.classList.remove("show"), 2500);
+    }
+
+    // background dots
+    for (let i = 0; i < 70; i++) {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dot.style.left = Math.random() * 100 + "vw";
+        dot.style.top = Math.random() * -100 + "vh";
+        dot.style.animationDuration = (5 + Math.random() * 10) + "s";
+        document.body.appendChild(dot);
+    }
+</script>
 
 </body>
 </html>
+
