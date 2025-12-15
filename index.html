@@ -11,7 +11,7 @@
         margin: 0;
         height: 100vh;
         font-family: system-ui, sans-serif;
-        background: radial-gradient(circle at top, #111, #000);
+        background: radial-gradient(circle at top, #0f0f0f, #000);
         color: #f1f1f1;
         display: flex;
         align-items: center;
@@ -22,102 +22,84 @@
     .container {
         text-align: center;
         padding: 40px;
-        max-width: 650px;
+        max-width: 700px;
         animation: float 4s ease-in-out infinite;
         z-index: 2;
     }
 
     h1 {
         font-size: 3.2rem;
-        margin-bottom: 8px;
-        letter-spacing: 1px;
+        margin-bottom: 10px;
     }
 
     .identity {
-        font-size: 1.1rem;
-        opacity: 0.65;
-        margin-bottom: 25px;
+        opacity: 0.6;
+        margin-bottom: 30px;
     }
 
-    .statement {
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin-bottom: 35px;
-        line-height: 1.3;
+    .glitch {
+        font-size: 2.4rem;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        margin-bottom: 30px;
     }
 
     .subline {
-        font-size: 1.1rem;
         opacity: 0.7;
         margin-bottom: 35px;
     }
 
     button {
         background: none;
-        border: 2px solid #666;
+        border: 2px solid #555;
         color: #fff;
-        padding: 14px 34px;
+        padding: 14px 36px;
         font-size: 1rem;
         cursor: pointer;
         border-radius: 40px;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    button:hover {
-        border-color: #fff;
-        background: rgba(255,255,255,0.06);
-        transform: scale(1.05);
-    }
-
-    .meta {
-        margin-top: 25px;
-        font-size: 0.9rem;
-        opacity: 0.45;
     }
 
     .footer {
         position: absolute;
         bottom: 20px;
-        font-size: 0.8rem;
         opacity: 0.35;
+        font-size: 0.8rem;
     }
 
     @keyframes float {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
-        100% { transform: translateY(0); }
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
     }
 
-    .dot {
-        position: absolute;
-        width: 3px;
-        height: 3px;
-        background: white;
-        opacity: 0.15;
-        animation: drift linear infinite;
-    }
-
-    @keyframes drift {
-        from { transform: translateY(0); }
-        to { transform: translateY(100vh); }
-    }
-
-    .error {
+    /* FULLSCREEN MESSAGE */
+    .fullscreen {
         position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #111;
-        border: 1px solid #555;
-        padding: 14px 18px;
-        font-size: 0.85rem;
+        inset: 0;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
         opacity: 0;
-        transition: 0.4s;
+        pointer-events: none;
+        transition: opacity 1s ease;
+        z-index: 999;
     }
 
-    .error.show {
+    .fullscreen.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .line {
+        font-size: 3rem;
+        font-weight: 700;
+        opacity: 0;
+        margin: 10px 0;
+        transition: opacity 0.8s ease;
+    }
+
+    .line.show {
         opacity: 1;
     }
 </style>
@@ -127,58 +109,61 @@
 
 <div class="container">
     <h1>Aloo7027</h1>
+    <div class="identity">test site • chaotic energy • zero seriousness</div>
 
-    <div class="identity">
-        test site • chaotic energy • zero seriousness
-    </div>
+    <div class="glitch">I am now Yonro bhaiya</div>
 
-    <div class="statement">
-        I am now Yonro bhaiya
-    </div>
+    <div class="subline">I'm wasting time as usual</div>
 
-    <div class="subline">
-        I'm wasting time as usual
-    </div>
-
-    <button onclick="triggerChaos()">Don’t click</button>
-
-    <div class="meta">
-        productivity status: unchanged
-    </div>
+    <button id="chaosBtn">Don’t click</button>
 </div>
 
-<div class="footer">
-    experimental build • nothing important happening
-</div>
+<div class="footer">experimental build • controlled chaos</div>
 
-<div class="error" id="errorBox">
-    Tune phir aaj padhayi nhi ki na?
+<!-- FULLSCREEN OVERLAY -->
+<div class="fullscreen" id="screen">
+    <div class="line" id="l1">Tune phir</div>
+    <div class="line" id="l2">aaj padhayi</div>
+    <div class="line" id="l3">nahi kari?</div>
 </div>
 
 <script>
-    function triggerChaos() {
-        const actions = [
-            () => alert("Tune phir aaj padhayi nhi ki na?"),
-            () => showError(),
-            () => window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank"),
-            () => alert("No progress detected."),
-        ];
-        actions[Math.floor(Math.random() * actions.length)]();
-    }
+    const btn = document.getElementById("chaosBtn");
+    const screen = document.getElementById("screen");
+    const lines = [
+        document.getElementById("l1"),
+        document.getElementById("l2"),
+        document.getElementById("l3")
+    ];
 
-    function showError() {
-        const box = document.getElementById("errorBox");
-        box.classList.add("show");
-        setTimeout(() => box.classList.remove("show"), 2500);
-    }
+    btn.addEventListener("click", () => {
+        const rand = Math.random();
 
-    for (let i = 0; i < 80; i++) {
-        const dot = document.createElement("div");
-        dot.className = "dot";
-        dot.style.left = Math.random() * 100 + "vw";
-        dot.style.top = Math.random() * -100 + "vh";
-        dot.style.animationDuration = (6 + Math.random() * 10) + "s";
-        document.body.appendChild(dot);
+        if (rand < 0.4) {
+            fullscreenScold();
+        } else {
+            alert("Tune phir aaj padhayi nhi ki na?");
+        }
+    });
+
+    function fullscreenScold() {
+        screen.classList.add("show");
+
+        lines.forEach(l => l.classList.remove("show"));
+
+        setTimeout(() => lines[0].classList.add("show"), 500);
+        setTimeout(() => lines[1].classList.add("show"), 1200);
+        setTimeout(() => lines[2].classList.add("show"), 1900);
+
+        // fade out
+        setTimeout(() => {
+            screen.classList.remove("show");
+        }, 4200);
+
+        // rickroll AFTER fade
+        setTimeout(() => {
+            window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+        }, 4500);
     }
 </script>
 
