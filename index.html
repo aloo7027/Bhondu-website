@@ -5,164 +5,275 @@
 <title>Aloo7027</title>
 
 <style>
-    * { box-sizing: border-box; }
+* { box-sizing: border-box; }
 
-    body {
-        margin: 0;
-        height: 100vh;
-        font-family: system-ui, sans-serif;
-        background: radial-gradient(circle at top, #0f0f0f, #000);
-        color: #f1f1f1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-    }
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: system-ui, sans-serif;
+  background: radial-gradient(circle at center, #111 0%, #000 70%);
+  color: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
-    .container {
-        text-align: center;
-        padding: 40px;
-        max-width: 700px;
-        animation: float 4s ease-in-out infinite;
-        z-index: 2;
-    }
+/* vignette */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
+  pointer-events: none;
+}
 
-    h1 {
-        font-size: 3.2rem;
-        margin-bottom: 10px;
-    }
+/* grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.02),
+      rgba(255,255,255,0.02) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  opacity: 0.12;
+  pointer-events: none;
+}
 
-    .identity {
-        opacity: 0.6;
-        margin-bottom: 30px;
-    }
+.container {
+  text-align: center;
+  padding: 50px;
+  max-width: 720px;
+  animation: breathe 6s ease-in-out infinite;
+}
 
-    .main-line {
-        font-size: 2.6rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        margin-bottom: 30px;
-        letter-spacing: 1px;
-    }
+@keyframes breathe {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
 
-    .subline {
-        opacity: 0.7;
-        margin-bottom: 35px;
-    }
+h1 {
+  font-size: 3.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
 
-    button {
-        background: none;
-        border: 2px solid #555;
-        color: #fff;
-        padding: 14px 36px;
-        font-size: 1rem;
-        cursor: pointer;
-        border-radius: 40px;
-    }
+.identity {
+  opacity: 0.6;
+  margin-bottom: 30px;
+}
 
-    .footer {
-        position: absolute;
-        bottom: 20px;
-        opacity: 0.35;
-        font-size: 0.8rem;
-    }
+.main-line {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 24px;
+}
 
-    @keyframes float {
-        0%,100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
+.subline {
+  opacity: 0.7;
+  margin-bottom: 36px;
+}
 
-    /* FULLSCREEN OVERLAY */
-    .fullscreen {
-        position: fixed;
-        inset: 0;
-        background: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 1s ease;
-        z-index: 999;
-    }
+button {
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 16px 40px;
+  font-size: 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
 
-    .fullscreen.show {
-        opacity: 1;
-        pointer-events: all;
-    }
+.footer {
+  position: fixed;
+  bottom: 20px;
+  font-size: 0.75rem;
+  opacity: 0.35;
+}
 
-    .fs-line {
-        font-size: 4rem;
-        font-weight: 800;
-        opacity: 0;
-        margin: 12px 0;
-        transition: opacity 0.8s ease;
-        text-align: center;
-        width: 100%;
-    }
+/* FULLSCREEN SCOLD */
+.fullscreen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  z-index: 999;
+}
 
-    .fs-line.show {
-        opacity: 1;
-    }
+.fullscreen.show {
+  opacity: 1;
+}
+
+.fs-line {
+  font-size: 4.2rem;
+  font-weight: 900;
+  opacity: 0;
+  margin: 10px 0;
+  transition: opacity 0.6s ease;
+}
+
+.fs-line.show {
+  opacity: 1;
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>Aloo7027</h1>
-    <div class="identity">BHONDU site • LOW energy • ZERO seriousness</div>
+<div class="container" id="card">
+  <h1>Aloo7027</h1>
+  <div class="identity">test site • chaotic energy • zero seriousness</div>
 
-    <div class="main-line">I'm Yonro</div>
+  <div class="main-line">I'm Yonro</div>
+  <div class="subline">I'm wasting time as usual</div>
 
-    <div class="subline">Ghee aur tel DONO khatam hai</div>
-
-    <button id="chaosBtn">Don’t click</button>
+  <button id="chaosBtn">Don’t click</button>
 </div>
 
-<div class="footer">nonsense build • only chaos</div>
+<div class="footer">experimental build • controlled chaos</div>
 
 <!-- FULLSCREEN SCOLD -->
 <div class="fullscreen" id="screen">
-    <div class="fs-line" id="f1">phir</div>
-    <div class="fs-line" id="f2">aaj padhayi</div>
-    <div class="fs-line" id="f3">nhi ki na ??</div>
+  <div class="fs-line" id="f1">phir</div>
+  <div class="fs-line" id="f2">aaj padhayi</div>
+  <div class="fs-line" id="f3">nhi ki ??</div>
 </div>
 
 <script>
-    const btn = document.getElementById("chaosBtn");
-    const screen = document.getElementById("screen");
-    const lines = [
-        document.getElementById("f1"),
-        document.getElementById("f2"),
-        document.getElementById("f3")
-    ];
+/* ================= CORE CHAOS ================= */
 
-    btn.addEventListener("click", () => {
-        if (Math.random() < 0.5) {
-            fullscreenScold();
-        } else {
-            alert("Tune phir aaj padhayi nahi kari?");
-        }
-    });
+const btn = document.getElementById("chaosBtn");
+const screen = document.getElementById("screen");
+const lines = [...document.querySelectorAll(".fs-line")];
 
-    function fullscreenScold() {
-        screen.classList.add("show");
-        lines.forEach(l => l.classList.remove("show"));
+btn.addEventListener("click", () => {
+  if (Math.random() < 0.55) fullscreenScold();
+  else alert("Tune phir aaj padhayi nahi kari?");
+});
 
-        setTimeout(() => lines[0].classList.add("show"), 500);
-        setTimeout(() => lines[1].classList.add("show"), 1300);
-        setTimeout(() => lines[2].classList.add("show"), 2100);
+function fullscreenScold() {
+  screen.classList.add("show");
+  lines.forEach(l => l.classList.remove("show"));
 
-        setTimeout(() => {
-            screen.classList.remove("show");
-        }, 4200);
+  setTimeout(() => lines[0].classList.add("show"), 500);
+  setTimeout(() => lines[1].classList.add("show"), 1200);
+  setTimeout(() => lines[2].classList.add("show"), 2000);
 
-        setTimeout(() => {
-            window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-        }, 4600);
-    }
+  setTimeout(() => screen.classList.remove("show"), 4200);
+  setTimeout(() => {
+    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+  }, 4600);
+}
+
+/* ================= FAKE LAG ================= */
+
+function fakeLag(duration = 800) {
+  document.body.style.cursor = "wait";
+  document.body.style.pointerEvents = "none";
+  setTimeout(() => {
+    document.body.style.cursor = "";
+    document.body.style.pointerEvents = "";
+  }, duration);
+}
+
+document.addEventListener("click", () => {
+  if (Math.random() < 0.25) fakeLag(700 + Math.random() * 600);
+});
+
+/* ================= FAKE BATTERY ================= */
+
+setTimeout(() => {
+  if (Math.random() < 0.8) {
+    const warn = document.createElement("div");
+    warn.innerHTML = `
+      <div style="
+        background:#111;
+        border:1px solid #444;
+        padding:14px 18px;
+        font-size:0.85rem;
+        opacity:0;
+        transition:opacity 1s;
+      ">
+        Battery critically low.<br>
+        Please connect your charger.
+      </div>`;
+    warn.style.position = "fixed";
+    warn.style.bottom = "30px";
+    warn.style.right = "30px";
+    warn.style.zIndex = "999";
+    document.body.appendChild(warn);
+    setTimeout(() => warn.firstChild.style.opacity = "0.9", 200);
+    setTimeout(() => warn.remove(), 5000);
+  }
+}, 15000 + Math.random() * 15000);
+
+/* ================= FAKE PERMISSION ================= */
+
+setTimeout(() => {
+  if (Math.random() < 0.7) {
+    const box = document.createElement("div");
+    box.innerHTML = `
+      <div style="
+        background:#111;
+        border:1px solid #444;
+        padding:16px;
+        font-size:0.85rem;
+        max-width:320px;
+      ">
+        <div style="opacity:0.7;">This site wants to</div>
+        <div style="font-weight:600;margin:8px 0;">Access your productivity</div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button>Block</button>
+          <button>Allow</button>
+        </div>
+      </div>`;
+    box.style.position = "fixed";
+    box.style.top = "20px";
+    box.style.left = "50%";
+    box.style.transform = "translateX(-50%)";
+    box.style.zIndex = "999";
+    document.body.appendChild(box);
+    box.querySelectorAll("button").forEach(b =>
+      b.onclick = () => box.remove()
+    );
+  }
+}, 10000 + Math.random() * 15000);
+
+/* ================= BLACK FLASH ================= */
+
+function blackFlash() {
+  const flash = document.createElement("div");
+  flash.innerText = "GU KHALE";
+  Object.assign(flash.style, {
+    position:"fixed",
+    inset:"0",
+    background:"#000",
+    color:"#fff",
+    display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+    fontSize:"5rem",
+    fontWeight:"900",
+    zIndex:"10000"
+  });
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 350);
+}
+
+setTimeout(() => {
+  if (Math.random() < 0.35) blackFlash();
+}, 8000 + Math.random() * 20000);
 </script>
 
 </body>
