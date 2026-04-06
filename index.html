@@ -2,257 +2,797 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Aloo7027</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standard Integrals — Advanced Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
 <style>
-* { box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: #2a2a3a;
+    --accent: #c8a96e;
+    --accent2: #7eb8c9;
+    --accent3: #b07ec9;
+    --text: #e8e4dc;
+    --text-dim: #8a8690;
+    --text-bright: #f5f0e8;
+    --glow: rgba(200, 169, 110, 0.08);
+  }
 
-body {
-  margin: 0;
-  height: 100vh;
-  font-family: system-ui, sans-serif;
-  background: radial-gradient(circle at center, #111 0%, #000 70%);
-  color: #f2f2f2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* vignette */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  box-shadow: inset 0 0 220px rgba(0,0,0,0.9);
-  pointer-events: none;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* grain */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,0.02),
-      rgba(255,255,255,0.02) 1px,
-      transparent 1px,
-      transparent 2px
-    );
-  opacity: 0.12;
-  pointer-events: none;
-}
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
 
-.scene {
-  perspective: 1200px;
-}
+  /* Header */
+  header {
+    position: relative;
+    padding: 72px 40px 56px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
 
-.container {
-  text-align: center;
-  padding: 50px;
-  max-width: 720px;
-  transform-style: preserve-3d;
-  animation: breathe 6s ease-in-out infinite;
-}
+  header::before {
+    content: '∫';
+    position: absolute;
+    font-size: 420px;
+    color: rgba(200,169,110,0.03);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Playfair Display', serif;
+    pointer-events: none;
+    line-height: 1;
+  }
 
-@keyframes breathe {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.015); }
-}
+  .header-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
 
-h1 {
-  font-size: 3.4rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-}
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight: 400;
+    color: var(--text-bright);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
 
-.identity {
-  opacity: 0.6;
-  margin-bottom: 30px;
-}
+  header h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
 
-.main-line {
-  font-size: 2.8rem;
-  font-weight: 900;
-  margin-bottom: 24px;
-}
+  header p {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--text-dim);
+    font-size: 16px;
+    font-weight: 300;
+  }
 
-.subline {
-  opacity: 0.7;
-  margin-bottom: 36px;
-}
+  /* Navigation pills */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
 
-button {
-  background: transparent;
-  border: 2px solid rgba(255,255,255,0.4);
-  color: #fff;
-  padding: 18px 48px;
-  font-size: 1rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
+  nav a {
+    display: block;
+    padding: 14px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
 
-button:hover {
-  border-color: #fff;
-  transform: translateY(-2px);
-}
+  /* Main layout */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+  }
 
-.footer {
-  position: fixed;
-  bottom: 20px;
-  font-size: 0.75rem;
-  opacity: 0.35;
-}
+  /* Phase sections */
+  .phase {
+    margin-bottom: 72px;
+    animation: fadeUp 0.5s ease both;
+  }
 
-/* FULLSCREEN SCOLD */
-.fullscreen {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-  z-index: 999;
-}
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-.fullscreen.show {
-  opacity: 1;
-}
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
 
-.fs-line {
-  font-size: 4.2rem;
-  font-weight: 900;
-  opacity: 0;
-  margin: 10px 0;
-  transition: opacity 0.6s ease;
-}
+  .phase-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
 
-.fs-line.show {
-  opacity: 1;
-}
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+
+  .phase-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-left: auto;
+    text-align: right;
+    max-width: 260px;
+    flex-shrink: 0;
+  }
+
+  /* Integral cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--glow);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(200,169,110,0.3);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0.75;
+  }
+
+  .card-formula {
+    font-size: 16px;
+    color: var(--text-bright);
+    margin-bottom: 10px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .card-note {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-weight: 300;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.5;
+  }
+
+  /* Technique badge */
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    padding: 2px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .badge-feynman  { background: rgba(126,184,201,0.12); color: var(--accent2); border: 1px solid rgba(126,184,201,0.2); }
+  .badge-beta     { background: rgba(176,126,201,0.12); color: var(--accent3); border: 1px solid rgba(176,126,201,0.2); }
+  .badge-zeta     { background: rgba(200,169,110,0.12); color: var(--accent);  border: 1px solid rgba(200,169,110,0.2); }
+  .badge-symmetry { background: rgba(110,200,150,0.12); color: #7ec9a0;        border: 1px solid rgba(110,200,150,0.2); }
+  .badge-contour  { background: rgba(200,110,110,0.12); color: #c97e7e;        border: 1px solid rgba(200,110,110,0.2); }
+  .badge-series   { background: rgba(200,180,110,0.12); color: #c9ba7e;        border: 1px solid rgba(200,180,110,0.2); }
+  .badge-caution  { background: rgba(220,100,100,0.1);  color: #d08080;        border: 1px solid rgba(220,100,100,0.2); }
+
+  /* Correction callout */
+  .correction-box {
+    background: rgba(200,110,90,0.07);
+    border: 1px solid rgba(200,110,90,0.2);
+    border-left: 3px solid rgba(200,110,90,0.6);
+    border-radius: 3px;
+    padding: 14px 20px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #d09080;
+    font-style: italic;
+  }
+
+  /* Divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    margin: 64px 0;
+  }
+
+  /* Technique guide */
+  .technique-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .technique-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 22px;
+  }
+
+  .technique-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .technique-card p {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* MathJax override */
+  .MathJax { font-size: 1.05em !important; }
+
+  @media (max-width: 700px) {
+    header { padding: 48px 20px 40px; }
+    main { padding: 40px 16px 80px; }
+    nav { padding: 0 16px; }
+    .cards { grid-template-columns: 1fr; }
+    .phase-desc { display: none; }
+    .phase-header { flex-wrap: wrap; }
+  }
 </style>
 </head>
-
 <body>
 
-<div class="scene">
-  <div class="container" id="card">
-    <h1>Aloo7027</h1>
-    <div class="identity">BHONDU site • LOW energy • NO seriousness</div>
+<header>
+  <div class="header-eyebrow">Advanced Calculus Reference</div>
+  <h1>Standard <em>Integrals</em></h1>
+  <p>A curated compendium of classical results — from log-trig essentials to zeta connections, with technique annotations and corrected forms.</p>
+</header>
 
-    <div class="main-line">I'm Yonro</div>
-    <div class="subline">GHEE aur TEL dono khatam hai</div>
+<nav>
+  <a href="#phase1">Log-Trig</a>
+  <a href="#phase2">Rational & Irrational</a>
+  <a href="#phase3">Zeta & Series</a>
+  <a href="#phase4">Symmetry</a>
+  <a href="#phase5">Special Results</a>
+  <a href="#phase6">Feynman's Trick</a>
+  <a href="#phase7">Polylog Ladder</a>
+  <a href="#phase8">Techniques</a>
+</nav>
 
-    <button id="chaosBtn">Don’t click</button>
+<main>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 1 -->
+<section class="phase" id="phase1">
+  <div class="phase-header">
+    <span class="phase-number">01</span>
+    <h2 class="phase-title">Log-Trig Essentials</h2>
+    <span class="phase-desc">Most common pivot points in advanced calculus</span>
   </div>
-</div>
+  <div class="cards">
 
-<div class="footer">BEKAR build • ONLY chaos</div>
+    <div class="card">
+      <div class="card-label">Log-Sine</div>
+      <div class="card-formula">\[\int_0^{\pi/2} \ln(\sin x)\,dx = -\frac{\pi}{2}\ln 2\]</div>
+      <div class="card-note">Proved by splitting \(\sin x = 2\sin(x/2)\cos(x/2)\) and applying self-similarity of the integral.</div>
+    </div>
 
-<!-- FULLSCREEN SCOLD -->
-<div class="fullscreen" id="screen">
-  <div class="fs-line" id="f1">phir se</div>
-  <div class="fs-line" id="f2">aaj padhayi</div>
-  <div class="fs-line" id="f3">nhi ki na??</div>
-</div>
+    <div class="card">
+      <div class="card-label">Log-Cosine</div>
+      <div class="card-formula">\[\int_0^{\pi/2} \ln(\cos x)\,dx = -\frac{\pi}{2}\ln 2\]</div>
+      <div class="card-note">Equals the log-sine integral by the substitution \(x \mapsto \pi/2 - x\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Tangent</div>
+      <div class="card-formula">\[\int_0^{\pi/2} \ln(\tan x)\,dx = 0\]</div>
+      <div class="card-note">Follows from \(\ln\tan x = \ln\sin x - \ln\cos x\) and the two results above cancelling.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Inverse Trig Log — Catalan's Constant</div>
+      <div class="card-formula">\[\int_0^1 \frac{\arctan x}{x}\,dx = G \approx 0.9159\ldots\]</div>
+      <div class="card-note">Catalan's constant \(G = \sum_{n=0}^\infty \frac{(-1)^n}{(2n+1)^2}\). Expand \(\arctan x\) as a power series to see it directly.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Sine Power</div>
+      <div class="card-formula">\[\int_0^{\pi} x\ln(\sin x)\,dx = -\frac{\pi^2}{2}\ln 2\]</div>
+      <div class="card-note">Uses the Fourier series \(\ln\sin x = -\ln 2 - \sum_{k=1}^\infty \frac{\cos 2kx}{k}\) and integrates term by term.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 2 -->
+<section class="phase" id="phase2">
+  <div class="phase-header">
+    <span class="phase-number">02</span>
+    <h2 class="phase-title">Rational & Irrational Beasts</h2>
+    <span class="phase-desc">Require King's property, algebraic hacks, or contour methods</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Gaussian Integral</div>
+      <div class="card-formula">\[\int_0^{\infty} e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2}\]</div>
+      <div class="card-note">The polar-coordinates squaring trick. The full real-line version is \(\sqrt{\pi}\). Foundation of probability theory.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Dirichlet / Sinc Integral</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\sin x}{x}\,dx = \frac{\pi}{2}\]</div>
+      <div class="card-note">Proved via Feynman's trick with \(I(a) = \int_0^\infty \frac{\sin x}{x}e^{-ax}dx\), or by residues. Conditionally convergent, not absolutely.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Fresnel Integral</div>
+      <div class="card-formula">\[\int_0^{\infty} \sin(x^2)\,dx = \sqrt{\frac{\pi}{8}}\]</div>
+      <div class="card-note">Same value for \(\cos(x^2)\). Proved using contour integration over a sector of angle \(\pi/4\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Rational Zero</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\ln x}{1+x^2}\,dx = 0\]</div>
+      <div class="card-note">The substitution \(x \mapsto 1/x\) sends the integral to its own negative. A clean symmetry argument.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Quartic Identity</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{dx}{1+x^4} = \frac{\pi}{2\sqrt{2}}\]</div>
+      <div class="card-note">Factor \(1+x^4\) over \(\mathbb{R}\) into two quadratics, then partial fractions. Also follows from the Beta function.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Plus-One</div>
+      <div class="card-formula">\[\int_0^1 \frac{\ln(1+x)}{1+x^2}\,dx = \frac{\pi}{8}\ln 2\]</div>
+      <div class="card-note">Feynman's trick with parameter inside \(\ln(1+ax)\). A beautiful two-page derivation.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Ahmed's Integral — "Legendary"</div>
+      <div class="card-formula">\[\int_0^1 \frac{\arctan\!\left(\sqrt{x^2+2}\right)}{(x^2+2)\sqrt{x^2+1}}\,dx = \frac{5\pi^2}{96}\]</div>
+      <div class="card-note">Discovered by Zafar Ahmed (2002). Requires a double-parameter Feynman attack. A staple of integration competitions.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Sinc-Squared</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\sin^2 x}{x^2}\,dx = \frac{\pi}{2}\]</div>
+      <div class="card-note">Integrate by parts once to reduce to the Dirichlet sinc integral, or use Parseval's theorem on \(\text{rect}(\xi)\).</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 3 -->
+<section class="phase" id="phase3">
+  <div class="phase-header">
+    <span class="phase-number">03</span>
+    <h2 class="phase-title">Infinite Series & Zeta Connections</h2>
+    <span class="phase-desc">Where integration meets number theory</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Basel Problem Integral</div>
+      <div class="card-formula">\[\int_0^1 \frac{-\ln(1-x)}{x}\,dx = \sum_{n=1}^\infty \frac{1}{n^2} = \frac{\pi^2}{6}\]</div>
+      <div class="card-note">Expand \(-\ln(1-x) = \sum x^n/n\) and integrate term by term. Direct meeting point of analysis and number theory.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Zeta(3) Gateway — General Form</div>
+      <span class="badge badge-zeta">Zeta</span>
+      <div class="card-formula">\[\int_0^{\infty} \frac{x^{n-1}}{e^x - 1}\,dx = \Gamma(n)\,\zeta(n)\]</div>
+      <div class="card-note">At \(n=3\): gives \(\Gamma(3)\zeta(3) = 2\zeta(3)\) (Apéry's constant \(\approx 1.202\)). <strong>Note:</strong> the original list wrote this incorrectly — the general form is essential.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Polylog Base</div>
+      <div class="card-formula">\[\int_0^1 \frac{\ln x}{1-x}\,dx = -\frac{\pi^2}{6}\]</div>
+      <div class="card-note">Expand \(1/(1-x)\) as a geometric series. This is \(-\text{Li}_2(1) = -\zeta(2)\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Alternating Series Integral</div>
+      <div class="card-formula">\[\int_0^1 \frac{\ln x}{1+x}\,dx = -\frac{\pi^2}{12}\]</div>
+      <div class="card-note">Expand using the alternating geometric series. Equals \(-\frac{1}{2}\zeta(2)\). Relates to \(\eta(2)\) (Dirichlet eta function).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Gamma Function — The Full Definition</div>
+      <span class="badge badge-beta">Gamma</span>
+      <div class="card-formula">\[\int_0^{\infty} x^{s-1} e^{-x}\,dx = \Gamma(s), \quad s > 0\]</div>
+      <div class="card-note">At positive integers: \(\Gamma(n) = (n-1)!\). This is the master result. <strong>Note:</strong> the original list labelled this "Exponential Integral" — that name belongs to \(\text{Ei}(x)\), a different function entirely.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 4 -->
+<section class="phase" id="phase4">
+  <div class="phase-header">
+    <span class="phase-number">04</span>
+    <h2 class="phase-title">Symmetry & Parameter Hacks</h2>
+    <span class="phase-desc">Integrals that collapse with the right trick</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Master Symmetry — King's Property</div>
+      <span class="badge badge-symmetry">Symmetry</span>
+      <div class="card-formula">\[\int_0^{\pi/2} \frac{\sin^n x}{\sin^n x + \cos^n x}\,dx = \frac{\pi}{4}\]</div>
+      <div class="card-note">Works for <em>any</em> \(n \in \mathbb{R}\). The substitution \(x \mapsto \pi/2 - x\) sends the integrand to its complement; adding gives 1.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Trig Scaling</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\ln(1+x^2)}{1+x^2}\,dx = \pi\ln 2\]</div>
+      <div class="card-note">Feynman's trick with \(I(a) = \int_0^\infty \frac{\ln(1+a^2x^2)}{1+x^2}dx\), differentiate w.r.t. \(a\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Frullani's Integral</div>
+      <span class="badge badge-feynman">Feynman</span>
+      <div class="card-formula">\[\int_0^{\infty} \frac{f(ax) - f(bx)}{x}\,dx = \bigl(f(0) - f(\infty)\bigr)\ln\!\frac{a}{b}\]</div>
+      <div class="card-note">Requires \(f\) continuous with finite limits at 0 and \(\infty\). Classic: \(f = e^{-x}\) gives \(\int_0^\infty \frac{e^{-ax}-e^{-bx}}{x}dx = \ln(b/a)\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Cauchy / Laplace Identity</div>
+      <span class="badge badge-contour">Contour</span>
+      <div class="card-formula">\[\int_{-\infty}^{\infty} \frac{\cos x}{a^2 + x^2}\,dx = \frac{\pi}{a}e^{-a}, \quad a > 0\]</div>
+      <div class="card-note">Close the contour in the upper half-plane; single pole at \(x = ia\). A model residue calculation.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Sine Integral Product</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\sin(ax)\cos(bx)}{x}\,dx = \frac{\pi}{2}, \quad a > b > 0\]</div>
+      <div class="card-note">Use the product-to-sum identity \(2\sin A\cos B = \sin(A+B)+\sin(A-B)\), then apply Dirichlet's result to each piece.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 5 -->
+<section class="phase" id="phase5">
+  <div class="phase-header">
+    <span class="phase-number">05</span>
+    <h2 class="phase-title">High-Level Special Results</h2>
+    <span class="phase-desc">The "grand finale" tier</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Digamma Relation</div>
+      <span class="badge badge-beta">Beta/Gamma</span>
+      <div class="card-formula">\[\int_0^1 \frac{x^{a-1} - x^{b-1}}{1-x}\,dx = \psi(b) - \psi(a)\]</div>
+      <div class="card-note">Where \(\psi = \Gamma'/\Gamma\) is the digamma function. Fundamental tool for evaluating log-polynomial integrals over \([0,1]\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Beta Function — Euler's First Integral</div>
+      <span class="badge badge-beta">Beta/Gamma</span>
+      <div class="card-formula">\[\int_0^{\pi/2} \sin^m x\cos^n x\,dx = \frac{\Gamma\!\left(\frac{m+1}{2}\right)\Gamma\!\left(\frac{n+1}{2}\right)}{2\,\Gamma\!\left(\frac{m+n+2}{2}\right)}\]</div>
+      <div class="card-note">Derived via \(B(p,q) = \frac{\Gamma(p)\Gamma(q)}{\Gamma(p+q)}\) with \(p = (m+1)/2\), \(q = (n+1)/2\). Valid for \(m,n > -1\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Reflection Formula</div>
+      <span class="badge badge-beta">Gamma</span>
+      <div class="card-formula">\[\Gamma(s)\,\Gamma(1-s) = \frac{\pi}{\sin(\pi s)}, \quad s \notin \mathbb{Z}\]</div>
+      <div class="card-note">Euler's reflection formula. Unlocks dozens of integrals — whenever you see \(\Gamma(s)\Gamma(1-s)\), this collapses it to a clean trig expression.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Square Integral</div>
+      <div class="card-formula">\[\int_0^1 \frac{\ln^2 x}{1+x^2}\,dx = \frac{\pi^3}{16}\]</div>
+      <div class="card-note">Expand \(1/(1+x^2)\) as an alternating series, integrate \(x^{2k}\ln^2 x\) using \(\int_0^1 x^n \ln^2 x\,dx = \frac{2}{(n+1)^3}\), and recognise \(\beta(3)\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Inverse Log — Euler-Mascheroni</div>
+      <div class="card-formula">\[\int_0^1 \ln\!\left(\ln\frac{1}{x}\right)dx = -\gamma \approx -0.5772\ldots\]</div>
+      <div class="card-note">Follows from differentiating \(\Gamma(s) = \int_0^\infty x^{s-1}e^{-x}dx\) at \(s=1\). A deep connection between calculus and the Euler–Mascheroni constant.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Grand Finale</div>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\ln(1+x^4)}{1+x^2}\,dx = \pi\ln(1+\sqrt{2})\]</div>
+      <div class="card-note">Requires Feynman's trick with the parameter inside \(\ln(1+ax^4)\), combined with partial fractions over \(\mathbb{C}\). A true showpiece result.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Power-Log Radical</div>
+      <span class="badge badge-beta">Beta/Gamma</span>
+      <div class="card-formula">\[\int_0^1 \frac{dx}{\sqrt[n]{1-x^n}} = \frac{\sqrt{\pi}\;\Gamma(1/n)}{n\;\Gamma\!\left(\tfrac{1}{n}+\tfrac{1}{2}\right)}\]</div>
+      <div class="card-note">Substitute \(u = x^n\), then recognise the Beta integral \(B\!\left(\tfrac{1}{n}, \tfrac{1}{2}\right)\) and apply the Gamma relation.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 6 -->
+<section class="phase" id="phase6">
+  <div class="phase-header">
+    <span class="phase-number">06</span>
+    <h2 class="phase-title">Feynman's Trick Templates</h2>
+    <span class="phase-desc">Differentiation under the integral sign — added to original list</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Log-Ratio via Parameter</div>
+      <span class="badge badge-feynman">Feynman</span>
+      <div class="card-formula">\[\int_0^1 \frac{x^a - x^b}{\ln x}\,dx = \ln\frac{a+1}{b+1}\]</div>
+      <div class="card-note">Define \(I(a) = \int_0^1 x^a/\ln x\,dx\), differentiate, solve the ODE, and integrate back. The logarithm in the integrand is "unlocked" by differentiation.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Exponential Sinc — Laplace Form</div>
+      <span class="badge badge-feynman">Feynman</span>
+      <div class="card-formula">\[\int_0^{\infty} \frac{\sin(bx)}{x}\,e^{-ax}\,dx = \arctan\!\frac{b}{a}, \quad a > 0\]</div>
+      <div class="card-note">Differentiate w.r.t. \(b\) to get a simple rational integral. As \(a \to 0^+\), recovers Dirichlet's \(\pi/2\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Gaussian with Linear Exponent</div>
+      <span class="badge badge-feynman">Feynman</span>
+      <div class="card-formula">\[\int_0^{\infty} e^{-ax^2}\,dx = \frac{1}{2}\sqrt{\frac{\pi}{a}}, \quad a > 0\]</div>
+      <div class="card-note">Differentiate w.r.t. \(a\) to generate \(\int x^{2n} e^{-ax^2}dx\) for all orders — the entire Gaussian integral family from one result.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log-Cosine Family</div>
+      <span class="badge badge-feynman">Feynman</span>
+      <div class="card-formula">\[\int_0^{\infty} e^{-ax}\cos(bx)\,dx = \frac{a}{a^2+b^2}, \quad a > 0\]</div>
+      <div class="card-note">Paired with the sine version \(\frac{b}{a^2+b^2}\). Combine as the real and imaginary parts of \(\int_0^\infty e^{-(a-ib)x}dx\).</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 7 -->
+<section class="phase" id="phase7">
+  <div class="phase-header">
+    <span class="phase-number">07</span>
+    <h2 class="phase-title">Polylogarithm & Zeta Ladder</h2>
+    <span class="phase-desc">Added to original list — essential for competition-level problems</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-label">Log² over (1+x)</div>
+      <span class="badge badge-zeta">Zeta</span>
+      <div class="card-formula">\[\int_0^1 \frac{\ln^2 x}{1+x}\,dx = \frac{7}{4}\,\zeta(3)\]</div>
+      <div class="card-note">Expand \(1/(1+x)\) as alternating geometric series and integrate \(x^n \ln^2 x\) term by term. Connects to Apéry's constant.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log × Log(1−x)</div>
+      <span class="badge badge-zeta">Zeta</span>
+      <div class="card-formula">\[\int_0^1 \ln x \cdot \ln(1-x)\,dx = 2 - \frac{\pi^2}{6}\]</div>
+      <div class="card-note">Expand \(\ln(1-x) = -\sum x^n/n\), integrate term by term using \(\int_0^1 x^n \ln x\,dx = -1/(n+1)^2\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Dilogarithm at 1</div>
+      <span class="badge badge-zeta">Polylog</span>
+      <div class="card-formula">\[\int_0^1 \frac{\text{Li}_2(x)}{x}\,dx = \zeta(3)\]</div>
+      <div class="card-note">The polylogarithm ladder: \(\text{Li}_2(x) = -\int_0^x \frac{\ln(1-t)}{t}dt\). Iterate to build \(\text{Li}_3\), \(\text{Li}_4\), connecting to all \(\zeta(2k+1)\).</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Log² over (1−x)</div>
+      <span class="badge badge-zeta">Zeta</span>
+      <div class="card-formula">\[\int_0^1 \frac{\ln^2 x}{1-x}\,dx = 2\,\zeta(3)\]</div>
+      <div class="card-note">Same technique as the \(\ln^2/(1+x)\) case but with geometric (non-alternating) series. Gives twice Apéry's constant.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Clausen / Log-Sine² Integral</div>
+      <span class="badge badge-zeta">Zeta</span>
+      <div class="card-formula">\[\int_0^{\pi/2} x^2\,dx = \frac{\pi^3}{24}, \quad \int_0^{\pi/2} \ln^2(\sin x)\,dx = \frac{\pi}{2}\!\left(\ln^2 2 + \frac{\pi^2}{12}\right)\]</div>
+      <div class="card-note">The second is a deep result proved via the Fourier series of \(\ln\sin x\). Clausen's function \(\text{Cl}_2\) generalises this family.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Parseval — Sinc² via Fourier</div>
+      <span class="badge badge-symmetry">Parseval</span>
+      <div class="card-formula">\[\int_{-\infty}^{\infty} \left(\frac{\sin x}{x}\right)^2 dx = \pi\]</div>
+      <div class="card-note">Apply Parseval's theorem to the rectangle function whose Fourier transform is \(\text{sinc}\). No contour integration needed — a slick one-liner.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ PHASE 8 — Techniques -->
+<div class="section-divider"></div>
+
+<section class="phase" id="phase8">
+  <div class="phase-header">
+    <span class="phase-number">08</span>
+    <h2 class="phase-title">Technique Map</h2>
+    <span class="phase-desc">Which tool opens which door</span>
+  </div>
+  <div class="technique-grid">
+
+    <div class="technique-card">
+      <h4>⟳ Symmetry / King's Property</h4>
+      <p>If \(\int_a^b f(x)\,dx\) has a reflection symmetry under \(x \mapsto a+b-x\), add the two forms. Instantly collapses any integral of the form \(f/(f+g)\) where \(g(x)=f(a+b-x)\).</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>∂/∂a Feynman's Trick</h4>
+      <p>Insert a parameter \(a\) into the integrand, differentiate under the integral sign, solve the simpler integral, then integrate back in \(a\). Best when there's a log or trig in the integrand with no natural series expansion.</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>∑ Series Expansion</h4>
+      <p>Expand a factor (e.g. \(\ln(1-x)\), \(1/(1\pm x)\), \(e^x\)) as a power series, integrate term by term, then recognise the resulting series as \(\zeta(s)\), \(\eta(s)\), \(\beta(s)\), or \(G\).</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>B/Γ Beta & Gamma Machinery</h4>
+      <p>Convert to the form \(\int_0^1 x^{p-1}(1-x)^{q-1}dx = B(p,q)\) or \(\int_0^\infty x^{s-1}e^{-x}dx = \Gamma(s)\). Euler's reflection formula \(\Gamma(s)\Gamma(1-s) = \pi/\sin(\pi s)\) then closes many results in closed form.</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>∮ Contour Integration</h4>
+      <p>For rational or rational-times-trig integrands over \((-\infty, \infty)\) or \((0, \infty)\): close in the upper half-plane, apply the residue theorem. Keyhole contours handle branch cuts (\(x^s\) terms). Sector contours handle \(e^{ix^2}\) (Fresnel).</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>Li Polylogarithm Ladder</h4>
+      <p>Recognise that \(\text{Li}_n(x) = \int_0^x \text{Li}_{n-1}(t)/t\,dt\) and \(\text{Li}_2(1)=\zeta(2)\), \(\text{Li}_3(1)=\zeta(3)\). Integrate by parts iteratively to climb the ladder and identify \(\zeta\) values at each rung.</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>≈ Glasser's Master Theorem</h4>
+      <p>States that \(\int_{-\infty}^\infty f\!\left(x - \frac{1}{x}\right)dx = \int_{-\infty}^\infty f(x)\,dx\). The substitution \(x \mapsto x - 1/x\) leaves the integral invariant — it collapses integrands with this hidden structure.</p>
+    </div>
+
+    <div class="technique-card">
+      <h4>♩ Parseval / Plancherel</h4>
+      <p>If \(\hat{f}(\xi)\) is the Fourier transform of \(f\), then \(\int |f|^2 = \int |\hat{f}|^2\). Convert a hard integral to a product of simple Fourier transforms. Optimal for sinc-type integrals and convolutions.</p>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Standard Integrals Reference &nbsp;·&nbsp; Phases I–VIII &nbsp;·&nbsp; Rendered with MathJax 3
+</footer>
 
 <script>
-/* ===== PARALLAX (COLORFUL FEEL WITHOUT COLORS) ===== */
-const card = document.getElementById("card");
-document.addEventListener("mousemove", e => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 10;
-  const y = (e.clientY / window.innerHeight - 0.5) * 10;
-  card.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+// Stagger card animations on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationDelay = `${(i % 6) * 60}ms`;
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.card, .technique-card').forEach(el => observer.observe(el));
+
+// Smooth scroll for nav links
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 });
-
-/* ===== CORE CHAOS ===== */
-const btn = document.getElementById("chaosBtn");
-const screen = document.getElementById("screen");
-const lines = [...document.querySelectorAll(".fs-line")];
-
-btn.addEventListener("click", () => {
-  if (Math.random() < 0.55) fullscreenScold();
-  else alert("Tune phir aaj padhayi nahi kari?");
-});
-
-function fullscreenScold() {
-  screen.classList.add("show");
-  lines.forEach(l => l.classList.remove("show"));
-
-  setTimeout(() => lines[0].classList.add("show"), 500);
-  setTimeout(() => lines[1].classList.add("show"), 1200);
-  setTimeout(() => lines[2].classList.add("show"), 2000);
-
-  setTimeout(() => screen.classList.remove("show"), 4200);
-  setTimeout(() => {
-    window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-  }, 4600);
-}
-
-/* ===== FAKE LAG ===== */
-function fakeLag(duration = 800) {
-  document.body.style.cursor = "wait";
-  document.body.style.pointerEvents = "none";
-  setTimeout(() => {
-    document.body.style.cursor = "";
-    document.body.style.pointerEvents = "";
-  }, duration);
-}
-document.addEventListener("click", () => {
-  if (Math.random() < 0.25) fakeLag(700 + Math.random() * 600);
-});
-
-/* ===== FAKE BATTERY ===== */
-setTimeout(() => {
-  if (Math.random() < 0.8) {
-    const warn = document.createElement("div");
-    warn.innerHTML = `<div style="background:#111;border:1px solid #444;padding:14px;font-size:.85rem;">Battery critically low.<br>Please connect your charger.</div>`;
-    warn.style.position = "fixed";
-    warn.style.bottom = "30px";
-    warn.style.right = "30px";
-    warn.style.zIndex = "999";
-    document.body.appendChild(warn);
-    setTimeout(() => warn.remove(), 5000);
-  }
-}, 15000 + Math.random() * 15000);
-
-/* ===== FAKE PERMISSION ===== */
-setTimeout(() => {
-  if (Math.random() < 0.7) {
-    const box = document.createElement("div");
-    box.innerHTML = `<div style="background:#111;border:1px solid #444;padding:16px;font-size:.85rem;">This site wants to access your productivity<br><br><button>Block</button> <button>Allow</button></div>`;
-    box.style.position = "fixed";
-    box.style.top = "20px";
-    box.style.left = "50%";
-    box.style.transform = "translateX(-50%)";
-    box.style.zIndex = "999";
-    document.body.appendChild(box);
-    box.querySelectorAll("button").forEach(b => b.onclick = () => box.remove());
-  }
-}, 10000 + Math.random() * 15000);
-
-/* ===== BLACK FLASH ===== */
-setTimeout(() => {
-  if (Math.random() < 0.35) {
-    const flash = document.createElement("div");
-    flash.innerText = "GU KHALE";
-    Object.assign(flash.style,{
-      position:"fixed",inset:"0",background:"#000",color:"#fff",
-      display:"flex",alignItems:"center",justifyContent:"center",
-      fontSize:"5rem",fontWeight:"900",zIndex:"10000"
-    });
-    document.body.appendChild(flash);
-    setTimeout(() => flash.remove(), 350);
-  }
-}, 8000 + Math.random() * 20000);
 </script>
-
 </body>
 </html>
